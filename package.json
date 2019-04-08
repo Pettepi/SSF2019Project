@@ -1,0 +1,26 @@
+{
+  "name": "ssfproject",
+  "version": "1.0.0",
+  "description": "market data website project for ssf2019 course",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "market",
+    "data",
+    "api",
+    "node",
+    "mongo"
+  ],
+  "author": "petteri piironen",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "dotenv": "^7.0.0",
+    "express": "^4.16.4",
+    "http": "0.0.0",
+    "https": "^1.0.0",
+    "mongoose": "^5.4.22"
+  }
+}

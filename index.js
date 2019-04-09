@@ -5,7 +5,7 @@ const https = require('https');
 const http = require('http');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const url = 'mongodb://localhost:27017/';
+const url = 'mongodb://localhost:30000/';
 const fs = require('fs');
 require('dotenv').config();
 app.use(bodyParser.json());
@@ -18,6 +18,12 @@ const options = {
     key: sslkey,
     cert: sslcert,
 };
+
+// HTTPS redirect
+http.createServer((req, res)=> {
+    res.writeHead(301, {'Location': 'https://localhost:3000' + req.url });
+    res.end();
+}).listen(8080);
 
 // MongoDB server initialization
 mongoose.connect(url, options, {useNewUrlParser: true}).then(()=>{

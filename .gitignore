@@ -1,2 +1,11 @@
 # Secret passwords etc.
 .env
+
+# SSL key & certificates
+*.pem
+*.csr
+
+# Logs
+logs
+*.log
+npm-debug.log*

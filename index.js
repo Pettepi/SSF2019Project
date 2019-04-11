@@ -12,6 +12,7 @@ const util = require('util');
 require('dotenv').config();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+
 // SSL
 const sslkey = fs.readFileSync('ssl-key.pem');
 const sslcert = fs.readFileSync('ssl-cert.pem');
@@ -21,6 +22,7 @@ const options = {
     cert: sslcert,
 };
 
+https.createServer(options, app).listen(3000);
 
 // google finance test
 const SYMBOL = 'NASDAQ:AAPL';

@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="99d40d48-5818-4f83-8998-98253db96796" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -50,14 +47,14 @@
           <entry key="env" value="28" />
           <entry key="gitignore" value="103" />
           <entry key="html" value="502" />
-          <entry key="js" value="1870" />
+          <entry key="js" value="1920" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key=".env file" value="28" />
           <entry key="HTML" value="502" />
-          <entry key="JavaScript" value="1870" />
+          <entry key="JavaScript" value="1920" />
           <entry key="PLAIN_TEXT" value="103" />
         </counts>
       </usages-collector>
@@ -68,8 +65,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="24" column="22" selection-start-line="24" selection-start-column="22" selection-end-line="24" selection-end-column="22" />
+            <state relative-caret-position="282">
+              <caret line="24" column="46" selection-start-line="24" selection-start-column="46" selection-end-line="24" selection-end-column="46" />
             </state>
           </provider>
         </entry>
@@ -192,7 +189,7 @@
     </packageJsonPaths>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="617" />
+    <option name="x" value="55" />
     <option name="y" value="26" />
     <option name="width" value="823" />
     <option name="height" value="842" />
@@ -298,15 +295,15 @@
       <option name="presentableId" value="Default" />
       <updated>1554710371957</updated>
       <workItem from="1554710374367" duration="7545000" />
-      <workItem from="1554929225354" duration="101000" />
+      <workItem from="1554929225354" duration="1027000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="7646000" />
+    <option name="totallyTimeSpent" value="8572000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="617" y="26" width="823" height="842" extended-state="0" />
+    <frame x="55" y="26" width="823" height="842" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49900597" visible="true" weight="0.24937657" />
@@ -338,8 +335,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="24" column="22" selection-start-line="24" selection-start-column="22" selection-end-line="24" selection-end-column="22" />
+        <state relative-caret-position="282">
+          <caret line="24" column="46" selection-start-line="24" selection-start-column="46" selection-end-line="24" selection-end-column="46" />
         </state>
       </provider>
     </entry>

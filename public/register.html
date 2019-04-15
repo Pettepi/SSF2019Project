@@ -1,17 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Register</title>
 </head>
 <body>
-<form action="register" method="post">
+<form id="login" action="/" method="post" onsubmit="validateMyForm();">
     <pre>
         E-Mail <input type="email" name="email" placeholder="Enter a valid e-mail address">
         Username: <input type="text" name="username" placeholder="Type your username here">
-        Password: <input type="password" name="password" placeholder="*****">
-        <input type="submit">
+        Password: <input type="password" name="password" placeholder="Password" id="password">
+        Confirm Password: <input type="password" name="passwordConf" placeholder="Confirm Password" id="password_conf">
+        <input type="submit" value="REGISTER">
     </pre>
 </form>
+<script type="text/javascript">
+    let passWordField = document.getElementById('password');
+    let passWordConfirmField = document.getElementById('password_conf');
+    let form = document.getElementById('login');
+    function validateMyForm(){
+        if(passWordField.value !== passWordConfirmField.value){
+            alert("Passwords do not match. Please try again.");
+        } else {
+            form.submit()
+        }
+    }
+</script>
 </body>
 </html>

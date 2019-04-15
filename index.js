@@ -9,9 +9,58 @@ const url = 'mongodb://localhost:30000/';
 const fs = require('fs');
 const googleFinance = require('google-finance');
 const util = require('util');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 require('dotenv').config();
+
+//parse requests
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+
+//connect to DB
+mongoose.connect(url);
+const db = mongoose.connection;
+
+//mongo error handler
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open',() => {
+   //connected
+});
+
+//Use sessions for logins
+app.use(session({
+    secret: 'asdfg',
+    resave: true,
+    saveUninitialized: false,
+    store: new MongoStore({
+        mongooseConnection: db
+    })
+}));
+
+//serve static files
+app.use(express.static(__dirname + '/public'));
+
+//routes
+const routes = require('./routers/userRouter');
+app.use('/', routes);
+
+//404 => error handler
+app.use(req, res, next => {
+    const err = new Error('File not found.');
+    err.status = 404;
+    next(err)
+});
+
+//error handler
+app.use(err, req, res => {
+    res.status(err.status || 500);
+    res.send(err.message)
+});
+
+//listen 3000
+app.listen(3000, function () {
+    console.log('Listening on port 3000')
+});
 
 // SSL
 const sslkey = fs.readFileSync('ssl-key.pem');
@@ -21,8 +70,6 @@ const options = {
     key: sslkey,
     cert: sslcert,
 };
-
-https.createServer(options, app).listen(3000);
 
 // google finance test
 const SYMBOL = 'NASDAQ:AAPL';
@@ -47,19 +94,11 @@ googleFinance.companyNews({
     }
 });
 
+// HTTPS create
+https.createServer(options, app).listen(3000);
+
 // HTTPS redirect
 http.createServer((req, res)=> {
     res.writeHead(301, {'Location': 'https://localhost:3000' + req.url });
     res.end();
 }).listen(8080);
-
-// MongoDB server initialization
-mongoose.connect(url, options, {useNewUrlParser: true}).then(()=>{
-    console.log('connected succesfully');
-    app.get('/', (req, res) => {
-        res.send('Security works')
-    });
-    app.listen(3000);
-}, err => {
-    console.log('connection to database failed' + err);
-});

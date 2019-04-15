@@ -26,7 +26,7 @@ const userSchema = new Schema({
 });
 
 userSchema.statics.authenticate((email, password, callback) => {
-   User.findOne({ email: email})
+   User.findOne({ email: email })
        .exec((err, user) => {
            if (err){
                return callback(err)

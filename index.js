@@ -45,14 +45,14 @@ const routes = require('./routers/userRouter');
 app.use('/', routes);
 
 //404 => error handler
-app.use(req, res, next => {
+app.use((next) => {
     const err = new Error('File not found.');
     err.status = 404;
     next(err)
 });
 
 //error handler
-app.use(err, req, res => {
+app.use((err, res) => {
     res.status(err.status || 500);
     res.send(err.message)
 });
@@ -95,7 +95,7 @@ googleFinance.companyNews({
 });
 
 // HTTPS create
-https.createServer(options, app).listen(3000);
+//https.createServer(options, app).listen(3000);
 
 // HTTPS redirect
 http.createServer((req, res)=> {

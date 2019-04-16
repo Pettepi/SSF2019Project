@@ -1,7 +1,7 @@
 'use strict';
 const express = require('express');
 const router = express.Router();
-const User = require('..models/user');
+const User = require('../models/users');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 
@@ -88,3 +88,5 @@ router.get('/logout', (req, res, next) => {
        });
    }
 });
+
+module.exports = router;

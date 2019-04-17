@@ -24,11 +24,11 @@ router.post('/', (req, res, next) => {
         req.body.password &&
         req.body.passwordConf) {
 
-        var userData = {
+        let userData = {
             email: req.body.email,
             username: req.body.username,
             password: req.body.password,
-        }
+        };
 
         User.create(userData, function (error, user) {
             if (error) {
@@ -65,7 +65,7 @@ router.get('/profile', (req, res, next)=> {
                 return next(error);
             } else {
                 if (user === null) {
-                    let err = new Error('Not authorized! Go back!');
+                    let err = new Error('Not authorized');
                     err.status = 400;
                     return next(err);
                 } else {

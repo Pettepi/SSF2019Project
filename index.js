@@ -5,12 +5,13 @@ const https = require('https');
 const http = require('http');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const url = 'mongodb://localhost:30000/';
+const url = 'mongodb://localhost:27017/';
 const fs = require('fs');
 const googleFinance = require('google-finance');
 const util = require('util');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
+const request = require('request');
 require('dotenv').config();
 
 //parse requests
@@ -45,11 +46,11 @@ const routes = require('./routers/userRouter');
 app.use('/', routes);
 
 //404 => error handler
-app.use((next) => {
-    const err = new Error('File not found.');
-    err.status = 404;
-    next(err)
-});
+// app.use('/', (req, res, next) => {
+//     const err = new Error('File not found.');
+//     err.status = 404;
+//     next(err)
+// });
 
 //error handler
 app.use((err, res) => {
@@ -72,7 +73,7 @@ const options = {
 };
 
 // google finance test
-const SYMBOL = 'NASDAQ:AAPL';
+/*const SYMBOL = 'NASDAQ:AAPL';
 
 googleFinance.companyNews({
    symbol: SYMBOL
@@ -92,7 +93,7 @@ googleFinance.companyNews({
     } else {
         console.log('N/A');
     }
-});
+});*/
 
 // HTTPS create
 //https.createServer(options, app).listen(3000);

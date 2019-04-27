@@ -10,8 +10,9 @@ const fs = require('fs');
 const googleFinance = require('google-finance');
 const util = require('util');
 const session = require('express-session');
+const passport = require('passport');
 const MongoStore = require('connect-mongo')(session);
-const request = require('request');
+const bcrypt = require('bcrypt');
 require('dotenv').config();
 
 //parse requests
@@ -58,11 +59,6 @@ app.use((err, res) => {
     res.send(err.message)
 });
 
-//listen 3000
-app.listen(3000, function () {
-    console.log('Listening on port 3000')
-});
-
 // SSL
 const sslkey = fs.readFileSync('ssl-key.pem');
 const sslcert = fs.readFileSync('ssl-cert.pem');
@@ -96,10 +92,56 @@ googleFinance.companyNews({
 });*/
 
 // HTTPS create
-//https.createServer(options, app).listen(3000);
+https.createServer(options, app).listen(3000);
 
 // HTTPS redirect
 http.createServer((req, res)=> {
     res.writeHead(301, {'Location': 'https://localhost:3000' + req.url });
     res.end();
 }).listen(8080);
+
+const LocalStrategy = require('passport-local').Strategy;
+passport.use(new LocalStrategy(
+    (username, password, done) => {
+        if (username === process.env.username
+            && bcrypt.compareSync(password, process.env.pwdhash)) {
+            return done(null, { username: username });
+        } else {
+            done(null, false, {message: 'Incorrect credentials.'});
+        }
+    })
+);
+
+// data put in passport cookies needs to be serialized
+passport.serializeUser((user, done) => {
+    done(null, user);
+});
+
+passport.deserializeUser((user, done) => {
+    done(null, user);
+});
+
+app.use(session({
+    secret: 'some s3cr3t value',
+    resave: true,
+    saveUninitialized: true,
+    cookie: { secure: true, // only over https
+        maxAge: 2 * 60 * 60 * 1000} // 2 hours
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+https.createServer(sslstuff, app).listen(3000);
+
+app.get('/', (req, res) => {
+    if(req.user !== undefined)
+        return res.send(`Hello ${req.user.username}!`);
+    res.send('Hello Secure World!');
+});
+
+app.post('/login',
+    passport.authenticate('local', {
+        successRedirect: '/',
+        failureRedirect: '/failed'
+    })
+);

@@ -12,7 +12,7 @@ module.exports = (app) => {
             res.send({
                 success: true,
                 message: 'works',
-                stockInfo: content['Time Series (Daily)']['2019-04-16']
+                stockInfo: content['Meta Data']['Time Series (5min)']
             })
         });
     })

@@ -5,7 +5,6 @@ const https = require('https');
 const http = require('http');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const url = 'mongodb://localhost:27017/';
 const fs = require('fs');
 const util = require('util');
 const session = require('express-session');
@@ -107,8 +106,6 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-
-https.createServer(sslstuff, app).listen(3000);
 
 app.get('/', (req, res) => {
     if(req.user !== undefined)

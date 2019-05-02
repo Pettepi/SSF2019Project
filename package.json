@@ -26,6 +26,7 @@
     "google-finance": "^0.1.12",
     "http": "0.0.0",
     "https": "^1.0.0",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.4.22",
     "openssl": "^1.1.0",
     "passport": "^0.4.0",

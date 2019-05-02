@@ -7,7 +7,6 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const url = 'mongodb://localhost:27017/';
 const fs = require('fs');
-const googleFinance = require('google-finance');
 const util = require('util');
 const session = require('express-session');
 const passport = require('passport');
@@ -20,8 +19,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 //connect to DB
-mongoose.connect(url);
-const db = mongoose.connection;
+db.connect(`mongodb://${process.env.DB_USER}:${process.env.DB_PWD}@${process.env.DB_HOST}:${process.env.DB_PORT}/test`, app);
+app.use ((req, res, next) => {
+    if (req.secure) {
+        // request was via https, so do no special handling
+        next();
+    } else {
+        // request was via http, so redirect to https
+        res.redirect('https://' + req.headers.host + req.url);
+    }
+});
 
 //mongo error handler
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -46,13 +53,6 @@ app.use(express.static(__dirname + '/public'));
 const routes = require('./routers/userRouter');
 app.use('/', routes);
 
-//404 => error handler
-// app.use('/', (req, res, next) => {
-//     const err = new Error('File not found.');
-//     err.status = 404;
-//     next(err)
-// });
-
 //error handler
 app.use((err, res) => {
     res.status(err.status || 500);
@@ -67,29 +67,6 @@ const options = {
     key: sslkey,
     cert: sslcert,
 };
-
-// google finance test
-/*const SYMBOL = 'NASDAQ:AAPL';
-
-googleFinance.companyNews({
-   symbol: SYMBOL
-}, function(err, news){
-    if (err) {throw err;}
-    console.log(util.format(
-        '=== %s (%d) ===',
-        SYMBOL,
-        news.length
-    ).cyan);
-    if (news[0]) {
-        console.log(
-            '%s\n...\n%s',
-            JSON.stringify(news[0], null, 2),
-            JSON.stringify(news[news.length - 1], null, 2)
-        );
-    } else {
-        console.log('N/A');
-    }
-});*/
 
 // HTTPS create
 https.createServer(options, app).listen(3000);

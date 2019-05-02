@@ -2,77 +2,27 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/users');
+const userController = require('../controllers/userController');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 
-// GET route
-router.get('/', (req, res) => {
-   return res.sendFile(path.join(__dirname + '/public/index.html'))
+router.post('/register', (req, res) => {
+    User.findOne({username: req.body.username}).then(user => {
+        if (user) {
+            res.send('User already exists.');
+        }
+        else {
+            userController.register_user(req).then((result) =>{
+                res.send('User: '+ result.username +'successfully created.');
+            });
+        }
+    });
 });
 
-// POST route
-router.post('/', (req, res, next) => {
-    //confirm password
-    if (req.body.password !== req.body.passwordConf) {
-        let err = new Error('Passwords do not match.');
-        err.status = 400;
-        res.send("Passwords don't match.");
-        return next(err);
-    }
-    if (req.body.email &&
-        req.body.username &&
-        req.body.password &&
-        req.body.passwordConf) {
-
-        let userData = {
-            email: req.body.email,
-            username: req.body.username,
-            password: req.body.password,
-        };
-
-        User.create(userData, function (error, user) {
-            if (error) {
-                return next(error);
-            } else {
-                req.session.userId = user._id;
-                return res.redirect('/profile');
-            }
-        });
-
-    } else if (req.body.logemail && req.body.logpassword) {
-        User.authenticate(req.body.logemail, req.body.logpassword, function (error, user) {
-            if (error || !user) {
-                let err = new Error('Wrong email or password.');
-                err.status = 401;
-                return next(err);
-            } else {
-                req.session.userId = user._id;
-                return res.redirect('/profile');
-            }
-        });
-    } else {
-        let err = new Error('All fields required.');
-        err.status = 400;
-        return next(err);
-    }
-});
-
-//GET after registration
-router.get('/profile', (req, res, next)=> {
-    User.findById(req.session.userId)
-        .exec(function (error, user) {
-            if (error) {
-                return next(error);
-            } else {
-                if (user === null) {
-                    let err = new Error('Not authorized');
-                    err.status = 400;
-                    return next(err);
-                } else {
-                    return res.send('<h1>Name: </h1>' + user.username + '<h2>Mail: </h2>' + user.email + '<br><a type="button" href="/logout">Logout</a>')
-                }
-            }
-        });
+router.post('/login', (req, res) => {
+    userController.login_user(req, res).then((result) => {
+        res.send(result);
+    });
 });
 
 //GET logout

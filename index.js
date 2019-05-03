@@ -17,22 +17,34 @@ require('dotenv').config();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-//connect to DB
-db.connect(`mongodb://${process.env.DB_USER}:${process.env.DB_PWD}@${process.env.DB_HOST}:${process.env.DB_PORT}/test`, app);
-app.use ((req, res, next) => {
-    if (req.secure) {
-        // request was via https, so do no special handling
-        next();
-    } else {
-        // request was via http, so redirect to https
-        res.redirect('https://' + req.headers.host + req.url);
-    }
-});
+// SSL
+const sslkey = fs.readFileSync('ssl-key.pem');
+const sslcert = fs.readFileSync('ssl-cert.pem');
 
+const options = {
+    key: sslkey,
+    cert: sslcert,
+};
+
+// HTTPS create
+https.createServer(options, app).listen(3000);
+
+//connect to DB
+mongoose.connect(`mongodb://${process.env.DB_USER}:${process.env.DB_PWD}@${process.env.DB_HOST}:${process.env.DB_PORT}/test`, { useNewUrlParser: true });
+const db = mongoose.connection;
 //mongo error handler
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open',() => {
-   //connected
+    //connected
+});
+app.use ((req, res, next) => {
+    if (req.secure) {
+        // HTTPS
+        next();
+    } else {
+        // redirect HTTPS
+        res.redirect('https://' + req.headers.host + req.url);
+    }
 });
 
 //Use sessions for logins
@@ -50,31 +62,15 @@ app.use(express.static(__dirname + '/public'));
 
 //routes
 const routes = require('./routers/userRouter');
-app.use('/', routes);
+app.use('/user', routes);
+const stockRoutes = require('./routers/stockRouter');
+app.use('/stock', stockRoutes);
 
 //error handler
 app.use((err, res) => {
     res.status(err.status || 500);
     res.send(err.message)
 });
-
-// SSL
-const sslkey = fs.readFileSync('ssl-key.pem');
-const sslcert = fs.readFileSync('ssl-cert.pem');
-
-const options = {
-    key: sslkey,
-    cert: sslcert,
-};
-
-// HTTPS create
-https.createServer(options, app).listen(3000);
-
-// HTTPS redirect
-http.createServer((req, res)=> {
-    res.writeHead(301, {'Location': 'https://localhost:3000' + req.url });
-    res.end();
-}).listen(8080);
 
 const LocalStrategy = require('passport-local').Strategy;
 passport.use(new LocalStrategy(
@@ -97,13 +93,6 @@ passport.deserializeUser((user, done) => {
     done(null, user);
 });
 
-app.use(session({
-    secret: 'some s3cr3t value',
-    resave: true,
-    saveUninitialized: true,
-    cookie: { secure: true, // only over https
-        maxAge: 2 * 60 * 60 * 1000} // 2 hours
-}));
 app.use(passport.initialize());
 app.use(passport.session());
 

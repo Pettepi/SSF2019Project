@@ -5,6 +5,8 @@ const User = require('../models/users');
 const userController = require('../controllers/userController');
 const session = require('express-session');
 
+
+// .then => userController
 router.post('/register', (req, res) => {
     User.findOne({username: req.body.username}).then(user => {
         if (user) {

@@ -1,19 +1,12 @@
 const request = require('request');
+const express = require('express');
+const router = express.Router();
+const fetch = require('node-fetch');
 
-module.exports = (app) => {
-    app.post('/stocks', (req, res) => {
-        request('https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=5min&apikey=N7T23GK2RRMG28XS', (error, response, body) => {
+router.get('/', (req, res) => {
+    fetch('https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=5min&apikey='+process.env.api_key)
+        .then(response => response.json())
+        .then(json => res.json(json));
+});
 
-            const content = JSON.parse(body);
-            console.log(content['Meta Data']);
-            console.log('error', error);
-            console.log('body', body);
-
-            res.send({
-                success: true,
-                message: 'works',
-                stockInfo: content['Meta Data']['Time Series (5min)']
-            })
-        });
-    })
-};
+module.exports = router;

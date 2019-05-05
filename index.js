@@ -11,6 +11,7 @@ const session = require('express-session');
 const passport = require('passport');
 const MongoStore = require('connect-mongo')(session);
 const bcrypt = require('bcrypt');
+app.set('view engine', 'pug');
 require('dotenv').config();
 
 //parse requests

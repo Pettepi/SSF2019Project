@@ -6,10 +6,14 @@ const apiurl = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&
 
 const pos = apiurl.lastIndexOf(symbol);
 
+const input = document.createElement("INPUT");
+input.setAttribute("type", "text");
+
+let userinput = input;
 // replace api query symbol string with that of users input
-/*
-pos.replace("symbol", 'userinput');
-*/
+
+pos.replace("symbol", userinput);
+
 
 router.get('/', (req, res) => {
     fetch(apiurl)
